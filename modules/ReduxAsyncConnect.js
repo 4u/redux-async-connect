@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import RouterContext from 'react-router/lib/RouterContext';
 import { beginGlobalLoad, endGlobalLoad, fullEndGlobalLoad } from './asyncConnect';
-import { connect } from 'react-redux';
+import { connect, ReactReduxContext } from 'react-redux';
 
 const { array, func, object, any, bool } = PropTypes;
 
@@ -100,10 +100,7 @@ class ReduxAsyncConnect extends React.Component {
     endGlobalLoad: func.isRequired,
     fullEndGlobalLoad: func.isRequired,
     renderIfNotLoaded: bool,
-    helpers: any
-  };
-
-  static contextTypes = {
+    helpers: any,
     store: object.isRequired
   };
 
@@ -114,7 +111,7 @@ class ReduxAsyncConnect extends React.Component {
   };
 
   isLoaded() {
-    return this.context.store.getState().reduxAsyncConnect.loaded;
+    return this.props.store.getState().reduxAsyncConnect.loaded;
   }
 
   constructor(props, context) {
@@ -142,7 +139,7 @@ class ReduxAsyncConnect extends React.Component {
   }
 
   loadAsyncData(props) {
-    const store = this.context.store;
+    const store = this.props.store;
     const loadResult = loadAsyncConnect({...props, store});
 
     loadDataCounter++;
@@ -176,10 +173,19 @@ class ReduxAsyncConnect extends React.Component {
   }
 }
 
+
+const ReactReduxConnectWrapper = React.forwardRef(function ReactReduxConnectWrapper(props, ref) {
+  return (
+      <ReactReduxContext.Consumer>
+        {({store}) => <ReduxAsyncConnect {...props} store={store} ref={ref} />}
+      </ReactReduxContext.Consumer>
+  );
+});
+
 export default connect(null, {
   beginGlobalLoad,
   endGlobalLoad,
   fullEndGlobalLoad,
 }, null, {
-  withRef: true,
-})(ReduxAsyncConnect);
+  forwardRef: true,
+})(ReactReduxConnectWrapper);
