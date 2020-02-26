@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import RouterContext from 'react-router/lib/RouterContext';
 import { beginGlobalLoad, endGlobalLoad, fullEndGlobalLoad } from './asyncConnect';
-import { connect } from 'react-redux';
+import { connect, ReactReduxContext } from 'react-redux';
 
 const { array, func, object, any, bool } = PropTypes;
 
@@ -105,9 +105,7 @@ class ReduxAsyncConnect extends React.Component {
     helpers: any
   };
 
-  static contextTypes = {
-    store: object.isRequired
-  };
+  static contextType = ReactReduxContext;
 
   static defaultProps = {
     render(props) {
@@ -178,5 +176,5 @@ export default connect(null, {
   endGlobalLoad,
   fullEndGlobalLoad,
 }, null, {
-  withRef: true,
+  forwardRef: true,
 })(ReduxAsyncConnect);
