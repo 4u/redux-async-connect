@@ -1,5 +1,3 @@
-import { connect } from 'react-redux';
-
 export const LOAD = 'reduxAsyncConnect/LOAD';
 export const LOAD_SUCCESS = 'reduxAsyncConnect/LOAD_SUCCESS';
 export const LOAD_FAIL = 'reduxAsyncConnect/LOAD_FAIL';
@@ -142,14 +140,6 @@ function wrapWithDispatch(asyncItems) {
 export function asyncConnect(asyncItems) {
   return Component => {
     Component.reduxAsyncConnect = wrapWithDispatch(asyncItems);
-
-    const finalMapStateToProps = state => {
-      return asyncItems.reduce((result, item) =>
-        item.key ? {...result, [item.key]: state.reduxAsyncConnect[item.key]} : result,
-        {}
-      );
-    };
-
-    return connect(finalMapStateToProps)(Component);
+    return Component;
   };
 }

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import RouterContext from 'react-router/lib/RouterContext';
 import { beginGlobalLoad, endGlobalLoad, fullEndGlobalLoad } from './asyncConnect';
-import { connect, ReactReduxContext } from 'react-redux';
+import { ReactReduxContext } from 'react-redux';
 
 const { array, func, object, any, bool } = PropTypes;
 
@@ -93,12 +93,11 @@ export function loadOnServer(args) {
 
 let loadDataCounter = 0;
 
-class ReduxAsyncConnect extends React.Component {
+export default class ReduxAsyncConnect extends React.Component {
   static propTypes = {
     components: array.isRequired,
     params: object.isRequired,
     render: func.isRequired,
-    beginGlobalLoad: func.isRequired,
     endGlobalLoad: func.isRequired,
     fullEndGlobalLoad: func.isRequired,
     renderIfNotLoaded: bool,
@@ -147,7 +146,7 @@ class ReduxAsyncConnect extends React.Component {
 
     loadDataCounter++;
 
-    this.props.beginGlobalLoad();
+    store.dispatch(beginGlobalLoad());
     return (loadDataCounterOriginal => {
       loadResult.promise.then(() => {
         // We need to change propsToShow only if loadAsyncData that called this promise
@@ -157,10 +156,10 @@ class ReduxAsyncConnect extends React.Component {
         if (loadDataCounter === loadDataCounterOriginal) {
           this.setState({propsToShow: props});
         }
-        this.props.endGlobalLoad();
+        store.dispatch(endGlobalLoad());
       });
       return loadResult.allPromise.then(() => {
-        this.props.fullEndGlobalLoad();
+        store.dispatch(fullEndGlobalLoad());
       })
     })(loadDataCounter);
   }
@@ -170,11 +169,3 @@ class ReduxAsyncConnect extends React.Component {
     return propsToShow && this.props.render(propsToShow);
   }
 }
-
-export default connect(null, {
-  beginGlobalLoad,
-  endGlobalLoad,
-  fullEndGlobalLoad,
-}, null, {
-  forwardRef: true,
-})(ReduxAsyncConnect);
