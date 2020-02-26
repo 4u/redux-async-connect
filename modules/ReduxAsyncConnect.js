@@ -6,29 +6,9 @@ import { ReactReduxContext } from 'react-redux';
 
 const { array, func, object, any, bool } = PropTypes;
 
-/**
- * We need to iterate over all components for specified routes.
- * Components array can include objects if named components are used:
- * https://github.com/rackt/react-router/blob/latest/docs/API.md#named-components
- *
- * @param components
- * @param iterator
- */
-function eachComponents(components, iterator) {
-  for (let i = 0, l = components.length; i < l; i++) { // eslint-disable-line id-length
-    if (typeof components[i] === 'object') {
-      for (let [key, value] of Object.entries(components[i])) {
-        iterator(value, i, key);
-      }
-    } else {
-      iterator(components[i], i);
-    }
-  }
-}
-
 function filterAndFlattenComponents(components) {
   const flattened = [];
-  eachComponents(components, (Component) => {
+  components.forEach((Component) => {
     if (Component && Component.reduxAsyncConnect) {
       flattened.push(Component);
     }
