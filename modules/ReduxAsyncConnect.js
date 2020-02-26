@@ -98,8 +98,6 @@ export default class ReduxAsyncConnect extends React.Component {
     components: array.isRequired,
     params: object.isRequired,
     render: func.isRequired,
-    endGlobalLoad: func.isRequired,
-    fullEndGlobalLoad: func.isRequired,
     renderIfNotLoaded: bool,
     helpers: any
   };
