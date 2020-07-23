@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import RouterContext from 'react-router/lib/RouterContext';
 import { beginGlobalLoad, endGlobalLoad, fullEndGlobalLoad } from './asyncConnect';
 import { ReactReduxContext } from 'react-redux';
 
@@ -83,12 +82,6 @@ export default class ReduxAsyncConnect extends React.Component {
   };
 
   static contextType = ReactReduxContext;
-
-  static defaultProps = {
-    render(props) {
-      return <RouterContext {...props} />;
-    }
-  };
 
   isLoaded() {
     return this.context.store.getState().reduxAsyncConnect.loaded;

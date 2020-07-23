@@ -30,7 +30,6 @@
   "peerDependencies": {
     "prop-types": "*",
     "react": "*",
-    "react-router": "^3.0.0",
     "react-redux": "*"
   },
   "devDependencies": {
@@ -61,7 +60,6 @@
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-router": "^3.0.0",
     "rimraf": "^2.4.2",
     "webpack": "^1.12.6",
     "webpack-dev-middleware": "^1.2.0",
