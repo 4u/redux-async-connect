@@ -126,11 +126,13 @@ export default class ReduxAsyncConnect extends React.Component {
         // loaded props last time and not the last called route
         if (loadDataCounter === loadDataCounterOriginal) {
           this.setState({propsToShow: props});
+          store.dispatch(endGlobalLoad());
         }
-        store.dispatch(endGlobalLoad());
       });
       return loadResult.allPromise.then(() => {
-        store.dispatch(fullEndGlobalLoad());
+        if (loadDataCounter === loadDataCounterOriginal) {
+          store.dispatch(fullEndGlobalLoad());
+        }
       })
     })(loadDataCounter);
   }
